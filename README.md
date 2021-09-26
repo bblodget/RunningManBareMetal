@@ -1,6 +1,8 @@
-# RunningManBareMetal
+# RPI RunningManBareMetal
 
 ![Image of RunningMan](images/RunningMan_small.png)
+
+![Video of RunningMan](images/RunningManVid2.mp4)
 
 This is a "bare-metal" program for the raspberry pi
 that has an animation of a stick figure man running across 
