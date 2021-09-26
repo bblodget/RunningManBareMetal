@@ -6,9 +6,13 @@ This is a "bare-metal" program for the raspberry pi
 that has an animation of a stick figure man running across 
 the screen.
 
-Bare-metal means that there is no Operating System (such as Linux)
+Bare-metal means that there is no Operating System (such as Linux) that
 is running on the raspberry pi. The program is interfacing with the hardware
-directly using the documented register interfaces.
+directly using the documented register interfaces. For example for the RPI4
+the [bcm2711-peripherals.pdf](https://datasheets.raspberrypi.org/bcm2711/bcm2711-peripherals.pdf) was used.  
+Most RPI datasheets are available from
+
+https://datasheets.raspberrypi.org/
 
 The code in this repository is a modified version  of the 
 [code found in part15](https://github.com/rockytriton/LLD/tree/main/rpi_bm/part15) of the 
@@ -72,3 +76,13 @@ void video_update()
     index = (index + 1) % 4;
 }
 ```
+
+## Building
+
+The Makefile tries to copy the generated image to an sdcard.
+The location of the sdcard is specified by the variable *BOOTMNT*.
+You will probably have to update that variable for your sdcard mount point.
+
+For the basic build environment setup and requirements see
+[Raspberry Pi Bare Metal Tutorial - Part 1](https://www.youtube.com/watch?v=pd9AVmcRc6U&list=PLVxiWMqQvhg9FCteL7I0aohj1_YiUx1x8)
+
