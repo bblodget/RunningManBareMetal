@@ -203,50 +203,40 @@ void video_update()
 {
     static u32 index = 0;
     static u32 xpos = 0;
+    // vert center. ypos = half_screen_height - half_man_height
     const u32 ypos = (fb_req.res.yres/2) -  (man_get_height()*SCALE/2);
 
     u32 man_anim[4] = {0, 1, 2, 1};
     u32 curr_frame = man_anim[index];
-    u32 blank_frame = man_get_frames();
+    u32 blank_frame = 3;
 
-
-#if 1
-    // Draw the background
-    // Size
+    // Calculate TXFR_LEN : DMA Transfer Length.
     // YLENGTH = upper 16 bits. Rows per frame
     // XLENGTH = lower 16 bits.  Bytes per row.
     u32 xlength = man_get_width()*SCALE;
     u32 ylength = man_get_height()*SCALE;
-    u32 size = ylength << 16 | xlength;
-    // Stride:  Upper 16 bits is the destination stride
+    u32 txfr_len = ylength << 16 | xlength;
+
+    // Calculate STRIDE:  Upper 16 bits is the destination stride
     // Lower 16 bits for source stride.
     u32 raw_stride = fb_req.res.xres - xlength;
     u32 stride =  raw_stride << 16 | raw_stride; 
 
     // Erase previous frame with empty block
-    do_dma(framebuffer(xpos,ypos), bitmapbuffer(blank_frame), size, stride);
-    // XXX timer_sleep(1);
+    do_dma(framebuffer(xpos,ypos), bitmapbuffer(blank_frame), txfr_len, stride);
 
     // Increment the position of the runner
-    xpos += 20;
-    if (xpos>=fb_req.res.xres) {
-        xpos = 0;
-    }
+    xpos = (xpos + 20) % fb_req.res.xres;
 
     // Draw the next running man frame
-    do_dma(framebuffer(xpos,ypos), bitmapbuffer(curr_frame), size, stride);
+    do_dma(framebuffer(xpos,ypos), bitmapbuffer(curr_frame), txfr_len, stride);
 
     // increment to next frame
-    index += 1;
-    // Check wrap around
-    if (index == 4) {
-        index = 0;
-    }
-#else
-    // dma, bpp=8, Draw the whole bitmap buffer
-    do_dma(FRAMEBUFFER, bg8_buffer, fb_req.buff.screen_size, 0);
-#endif
+    index = (index + 1) % 4;
 }
+
+// dma, bpp=8, Draw the whole bitmap buffer
+// XXX do_dma(FRAMEBUFFER, bg8_buffer, fb_req.buff.screen_size, 0);
 
 // Calculates offset into the frame buffer.
 volatile u8* framebuffer(u32 x_pos, u32 y_pos) {
