@@ -2,8 +2,6 @@
 
 ![Image of RunningMan](images/RunningMan_small.png)
 
-[![Video of RunningMan](images/RunningMan_small.png)](images/RunningManVid2.mp4 "Video")
-
 This is a "bare-metal" program for the raspberry pi
 that has an animation of a stick figure man running across 
 the screen.

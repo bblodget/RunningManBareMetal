@@ -229,7 +229,7 @@ void video_update()
 
     // Increment the position of the runner
     xpos += 20;
-    if (xpos==fb_req.res.xres - man_get_width()*SCALE) {
+    if (xpos>=fb_req.res.xres) {
         xpos = 0;
     }
 
