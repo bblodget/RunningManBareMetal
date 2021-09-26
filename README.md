@@ -2,14 +2,6 @@
 
 ![Image of RunningMan](images/RunningMan_small.png)
 
-<!-- blank line -->
-<figure class="video_container">
-  <video controls="true" allowfullscreen="true" poster="images/RunningMan_small.png">
-    <source src="images/RunningManVid2.mp4" type="video/mp4">
-  </video>
-</figure>
-<!-- blank line -->
-
 This is a "bare-metal" program for the raspberry pi
 that has an animation of a stick figure man running across 
 the screen.
@@ -28,3 +20,7 @@ which teaches how to create a simple operating system (OS) kernel from
 scratch.
 
 [https://github.com/s-matyukevich/raspberry-pi-os](https://github.com/s-matyukevich/raspberry-pi-os)
+
+## Video
+
+https://user-images.githubusercontent.com/410908/134825823-d8d1f77c-85e5-4906-a943-00db8fcaa600.mp4
