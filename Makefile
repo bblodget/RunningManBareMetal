@@ -15,7 +15,7 @@ SRC_DIR = src
 all : kernel8.img
 
 clean :
-	rm -rf $(BUILD_DIR) *.img 
+	rm -rf $(BUILD_DIR) *.img *.bin
 
 $(BUILD_DIR)/%_c.o: $(SRC_DIR)/%.c
 	mkdir -p $(@D)
@@ -39,15 +39,16 @@ kernel8.img: $(SRC_DIR)/linker.ld $(OBJ_FILES)
 	@echo ""
 	$(ARMGNU)-ld -T $(SRC_DIR)/linker.ld -o $(BUILD_DIR)/kernel8.elf $(OBJ_FILES)
 	$(ARMGNU)-objcopy $(BUILD_DIR)/kernel8.elf -O binary kernel8.img
-	sudo mount -t drvfs K: $(BOOTMNT) -o metadata
 ifeq ($(RPI_VERSION), 4)
+	cp kernel8.img boot/kernel8-rpi4.img
 	cp kernel8.img $(BOOTMNT)/kernel8-rpi4.img
 else
+	cp kernel8.img boot
 	cp kernel8.img $(BOOTMNT)/
 endif
+	cp config.txt boot
 	cp config.txt $(BOOTMNT)/
 	sync
-	sudo umount $(BOOTMNT)
 
 armstub/build/armstub_s.o: armstub/src/armstub.S
 	mkdir -p $(@D)
@@ -56,5 +57,12 @@ armstub/build/armstub_s.o: armstub/src/armstub.S
 armstub: armstub/build/armstub_s.o
 	$(ARMGNU)-ld --section-start=.text=0 -o armstub/build/armstub.elf armstub/build/armstub_s.o
 	$(ARMGNU)-objcopy armstub/build/armstub.elf -O binary armstub-new.bin
+	cp armstub-new.bin boot
 	cp armstub-new.bin $(BOOTMNT)/
 	sync
+
+mount:
+	sudo mount -t drvfs K: $(BOOTMNT) -o metadata
+
+umount:
+	sudo umount $(BOOTMNT)

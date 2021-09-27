@@ -77,12 +77,43 @@ void video_update()
 }
 ```
 
-## Building
+## Installing on sdcard
 
-The Makefile tries to copy the generated image to an sdcard.
-The location of the sdcard is specified by the variable *BOOTMNT*.
-You will probably have to update that variable for your sdcard mount point.
+This demo should run on RPI3 or RPI4.
+However most have my testing has been on the RPI4.
+
+The easiest way to try this image is if you already
+have an sdcard that has the Raspberry Pi OS on it.
+If this is the case you can follow these steps.
+
+1. Mount the sdcard on your computer and open up the boot partition.
+2. Rename the file *config.txt* to *config_orig.txt*.  This is to
+backup your config.txt file because it will be overwritten.
+You can restore it later if you wish.
+3. Copy the files in this repos [boot](boot) directory
+to the sdcard.
+4. Put the card back in the RPI3 or RPI4 and power up.
+It should boot the RunningMan Demo.
+
+## Building
 
 For the basic build environment setup and requirements see
 [Raspberry Pi Bare Metal Tutorial - Part 1](https://www.youtube.com/watch?v=pd9AVmcRc6U&list=PLVxiWMqQvhg9FCteL7I0aohj1_YiUx1x8)
 
+The Makefile tries to copy the generated image to an sdcard.
+The location of the sdcard is specified by the variable **BOOTMNT**.
+You will probably have to update that variable for your sdcard mount point.
+
+Also there is a Makefile variable called **RPI_VERSION**.  By default
+it is set to 4 so it will build for the RPI4.  If you want to build for
+RPI3 set it to 3.
+
+The steps to generate all the files:
+
+```
+$ make clean            # Clean for RPI4 version
+$ make                  # generates boot/kernel8-rpi4.img
+$ make clean            # Clean for RPI3 version
+$ RPI_VERSION=3 make    # generates boot/kernel8.img
+$ make armstub          # Arm boot up stuff
+```
